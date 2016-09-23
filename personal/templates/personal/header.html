@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+    <title>Home Page</title>
+    <style>
+        img {
+            float: right;
+            margin: 10px;
+            width: 600px;
+            height: 400px;
+            background-size: cover;
+            object-fit: cover;
+        }
+        .div3 {
+            float: left;
+            vertical-align: middle;
+        }
+        .div1 {
+            #float: left;
+            width: 600px;
+            height: 200px;
+            margin: 10px;
+            border: 3px solid #444444;
+            vertical-align: top;
+        }
+        .div2 {
+            #float: left;
+            width: 600px;
+            height: 200px;
+            margin: 10px;
+            border: 3px solid #444444;
+            vertical-align: bottom;
+        }
+        h1 {
+            text-align: center;
+        }
+        .p1 {
+            text-align: center;
+            font-size: x-large;
+            font-family: "Courier New";
+            background-color: #9d9d9d;
+            color: white;
+        }
+
+    </style>
+
+
+</head>
+<body class="body" style="background-color: #f6f6f6">
+    <h1> Speech to LaTeX </h1>
+    <div>
+        <h1> Enter the following codes on your app </h1>
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <div class="div3">
+        <div id="speech" class="div1">
+            Here Puts The Speech Text.
+        </div>
+
+        <div id="latex" class="div2">
+            Here Puts The LaTeX String.
+        </div>
+    </div>
+
+
+    <img id="img" src="//i.imgur.com/8YsAmq3.gif">
+
+    <script>
+        var root = 'https://speechtolatex.firebaseio.com/users/' + document.getElementById("uid").innerHTML;
+        var rootRef = new Firebase(root);
+        retrieveData();
+        function retrieveData() {
+            // Get the data on a post that has changed
+            rootRef.on("child_changed", function(snapshot) {
+                var changedPost = snapshot.val();
+                switch (snapshot.key()) {
+                    case 'latex':
+                        document.getElementById("latex").innerHTML = changedPost;
+                        break;
+                    case 'url':
+                        document.getElementById("img").src = changedPost;
+                        break;
+                    case 'speech':
+                        document.getElementById("speech").innerHTML = changedPost;
+                        break;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
